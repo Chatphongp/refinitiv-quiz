@@ -1,0 +1,104 @@
+<html>
+    <head>
+    <style>
+        body {
+            margin:  0;
+            overflow: scroll;
+        }
+
+        .container {
+            min-width: 0;
+            display : table;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container div {
+            display: table-cell;
+            border: 1px solid black;
+            height: 100%;
+        }
+
+        .first-column {
+            width : 200px;
+            min-width: 200px;
+        }
+
+        .second-column {
+            min-width: 100px;
+        }
+
+        .third-column {
+            min-width: 300px;
+            width: 300px;
+        }
+    </style>
+    <script>
+        var roundedValue = 0;
+        var input;
+        document.addEventListener('DOMContentLoaded', function(){ 
+            input = document.getElementById('input');
+            input.addEventListener('input', onInputChanged)
+        }, false);
+
+        function onInputChanged (e) {
+            var userInput = e.target.value;
+            
+
+            if (!isInteger(userInput)) {
+                userInput = Math.round(userInput);
+                input.value = userInput;
+            }
+
+            if (userInput < 0) {
+                userInput = 1;
+                input.value = 1;
+            }
+
+            const selector = document.getElementById('selector');
+            var b;
+            
+            if (selector.value == 1) { //prime
+                b = isPrime(userInput)
+            } else {
+                b = isFibonacci(userInput)  
+            }
+
+            const thirdColumn = document.getElementsByClassName('third-column')[0];
+            thirdColumn.innerHTML = b;
+        }
+
+        function isFibonacci(num) {
+            return isSquare(5*num*num + 4) || isSquare(5*num*num - 4);
+        }
+
+        function isSquare (num) {
+            return isInteger(Math.sqrt(num));
+        }
+
+        function isPrime(num) {
+            for(var i = 2; i < num; i++)
+                if(num % i === 0) return false;
+            return num > 1;
+        }
+
+        function isInteger(num) {
+            return num % 1 === 0;
+        }
+    </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="first-column">
+                <input id="input" type="number">
+            </div>
+            <div class="second-column">
+                <select id="selector">
+                    <option value="1">isPrime</option>
+                    <option value="2">isFibonacci</option>
+                </select>
+            </div>
+            <div class="third-column"></div>
+        </div>
+    </body>
+</html>

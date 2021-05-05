@@ -1,0 +1,82 @@
+<html>
+    <head>
+    <style>
+        body {
+            margin:  0;
+            overflow: scroll;
+        }
+
+        .container {
+            min-width: 0;
+            display : table;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container div {
+            display: table-cell;
+            border: 1px solid black;
+            height: 100%;
+        }
+
+        .first-column {
+            width : 200px;
+            min-width: 200px;
+        }
+
+        .second-column {
+            min-width: 100px;
+        }
+    </style>
+    <script>
+        var data;
+        var filter = "";
+        document.addEventListener('DOMContentLoaded',async function(){
+
+            const input = document.getElementById('input');
+            input.addEventListener('input', onInputChanged);
+            data = await getData();
+
+            displayData();
+        }, false);
+
+        async function getData() {
+            let result = await fetch('https://api.publicapis.org/categories').then(res => res.json()).then((response) =>    {
+                return response;
+            });
+            return result;
+        }
+
+        function onInputChanged(e) {
+            filter = e.target.value;
+
+            displayData(data, filter);
+        }
+        
+        function displayData() {
+            const list = document.getElementById('list');
+            list.innerHTML = "";
+
+            data.forEach(element => {
+                console.log(element);
+                if (element.toLowerCase().includes(filter.toLowerCase())) {
+                    var li = document.createElement('li');
+                    li.innerHTML = element;   
+                    list.appendChild(li);
+                }
+            });
+        }
+
+    </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="first-column">
+                <input id="input" type="text">
+            </div>
+            <div class="second-column">
+                <ul id="list"></ul>
+            </div>
+        </div>
+    </body>
+</html>
